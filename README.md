@@ -264,13 +264,13 @@ YOUI/
 
 ## 👥 Team
 
-| Name | Role |
-|:-----|:-----|
-| **Mohamed Abobakr Ahmed** | Team Lead |
-| Mohamed Sayed Mohamed | Member |
-| Abdelrahman Mohamed Hassan | Member |
-| Fatma Abdelmotagly | Member |
-| Dina Ebrahem | Member |
+| Name |
+|:-----|
+| **Mohamed Abobakr Ahmed** |
+| Mohamed Sayed Mohamed |
+| Abdelrahman Mohamed Hassan |
+| Fatma Abdelmotagly |
+| Dina Ebrahem |
 
 > **Supervisor:** Prof. Sameh Ahmed — Faculty of Science, Computer Science Department
 
