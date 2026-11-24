@@ -1,0 +1,35 @@
+flowchart TB
+  subgraph FE["Browser"]
+    SPA["React app<br/>Landing, Auth, Chat, Canvas"]
+    IF["Canvas iframe (sandboxed)<br/>shows the generated pages"]
+  end
+  subgraph BE["FastAPI backend: one app, layered"]
+    API["API layer<br/>routes, JWT check, validation, rate limit, streaming"]
+    ORCH["Orchestrator<br/>phase order, build limit, retries, job status"]
+    subgraph WORK["Workers called only by the Orchestrator"]
+      A1["Agent 1<br/>questions, Spec<br/>(LangGraph)"]
+      VAL["Validation<br/>schema, Blocklist,<br/>uniqueness"]
+      A2["Agent 2<br/>build, edit<br/>(LangGraph)"]
+    end
+    subgraph INF["Infrastructure"]
+      REPO["Repositories<br/>(MongoDB)"]
+      LLMC["LLM client<br/>retry, fallback, token cap"]
+      EXP["Exporters<br/>JSON, PDF, ZIP"]
+      BLF["Blocklist files<br/>(read-only)"]
+    end
+  end
+  DB[("MongoDB")]
+  LLM["LLM provider"]
+  SPA -->|"REST + streamed replies"| API
+  SPA --- IF
+  API --> ORCH
+  ORCH --> A1
+  ORCH --> VAL
+  ORCH --> A2
+  A1 --> LLMC
+  A2 --> LLMC
+  VAL --> BLF
+  ORCH --> REPO
+  ORCH --> EXP
+  REPO --> DB
+  LLMC --> LLM

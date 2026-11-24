@@ -1,0 +1,51 @@
+erDiagram
+  USERS ||--o{ CONVERSATIONS : owns
+  CONVERSATIONS ||--o{ MESSAGES : contains
+  CONVERSATIONS ||--o| SPECS : "approved Spec"
+  SPECS ||--|| FINGERPRINTS : "has one"
+  CONVERSATIONS ||--o{ BUILDS : "versions"
+  USERS {
+    ObjectId _id
+    string email "unique"
+    string password_hash
+    string language
+  }
+  CONVERSATIONS {
+    ObjectId _id
+    ObjectId user_id
+    string title
+    string phase "asking, spec, building, ready"
+    object answers "five answers, assumed flags"
+    datetime updated_at
+  }
+  MESSAGES {
+    ObjectId _id
+    ObjectId conversation_id
+    string role
+    string text
+    array suggestions
+    datetime created_at
+  }
+  SPECS {
+    ObjectId _id
+    ObjectId conversation_id
+    object spec "Spec JSON"
+    array user_overrides
+  }
+  FINGERPRINTS {
+    ObjectId _id
+    ObjectId spec_id
+    array pages "template, layout, sections"
+    array palette
+    array fonts
+  }
+  BUILDS {
+    ObjectId _id
+    ObjectId conversation_id
+    ObjectId user_id
+    int version
+    string kind "build, edit, revert"
+    string status
+    object files
+    datetime created_at
+  }

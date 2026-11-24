@@ -1,0 +1,34 @@
+sequenceDiagram
+  autonumber
+  actor U as User (React)
+  participant API as API layer
+  participant O as Orchestrator
+  participant A1 as Agent 1
+  participant V as Validation
+  participant A2 as Agent 2
+  participant DB as MongoDB
+  U->>API: send message (JWT cookie)
+  API->>O: handle_message(user, conversation, text)
+  O->>DB: load conversation (answers, phase)
+  O->>A1: next step(answers, text)
+  A1-->>O: saved answer + next question
+  O->>DB: save answer
+  O-->>U: streamed reply and suggestions
+  Note over O,A1: When all 5 answers are saved (checked in code)
+  O->>A1: generate Spec
+  A1-->>O: Spec JSON
+  O->>V: validate(Spec)
+  alt fails and tries left
+    V-->>O: reasons
+    O->>A1: retry with reasons
+  else passes
+    O->>DB: save Spec + fingerprint
+    O-->>U: Spec ready (JSON, PDF)
+  end
+  U->>API: build request
+  API->>O: start_build
+  O->>DB: check Spec approved + attempts left
+  O->>A2: build(Spec) as background task
+  A2-->>O: files per page
+  O->>DB: save build version
+  O-->>U: progress, then pages in Canvas

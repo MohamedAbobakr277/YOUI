@@ -1,0 +1,23 @@
+flowchart TD
+  S(["User message"]) --> L["load_state<br/>(from MongoDB)"]
+  L --> G{"guard<br/>classify intent"}
+  G -->|"off-topic / injection"| R["refuse politely<br/>(AI-20, AI-22)"]
+  G -->|"vague"| Q2["rephrase question<br/>(FR-18)"]
+  G -->|"answer / change answer /<br/>choose for me"| E["extract_answer<br/>structured output"]
+  E --> C{"blocked or too<br/>similar? (FR-19)"}
+  C -->|"yes, first time"| X["explain + propose<br/>alternative"]
+  C -->|"no, or user insists"| SV["save_answer<br/>(FR-22)"]
+  SV --> D{"all 5 answers<br/>complete? (code)"}
+  D -->|"no"| NQ["ask_next_question<br/>+ 3 to 5 suggestions"]
+  D -->|"yes"| PR["prepare_spec<br/>load fingerprints + Blocklist"]
+  PR --> GS["generate_spec"]
+  GS --> V{"validate in code<br/>schema, Blocklist,<br/>uniqueness >= 50%"}
+  V -->|"fail, tries < N"| GS
+  V -->|"fail, tries = N"| F["failure message<br/>+ retry option (FR-29)"]
+  V -->|"pass"| AP["save Spec + fingerprint<br/>+ JSON/PDF export"]
+  AP --> H(["Hand to Orchestrator:<br/>Spec approved"])
+  R --> OUT(["Reply to user"])
+  Q2 --> OUT
+  X --> OUT
+  NQ --> OUT
+  F --> OUT
