@@ -1,6 +1,6 @@
 # YOUI: Architecture and Design Patterns
 
-**Document:** `docs/architecture/ARCHITECTURE.md`  |  **Version:** 2.0 (simplified, for team review)  |  **Based on:** YOUI SRS  |  **Owner:** [name]
+**Document:** `docs/architecture/ARCHITECTURE.md`  |  **Version:** 2.0 (simplified, for team review)  |  **Based on:** YOUI SRS  |  **Owner:** Mohamed Abo Bakr
 
 ## 1. Summary
 
